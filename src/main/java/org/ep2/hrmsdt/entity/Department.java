@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * <p>
@@ -86,18 +85,5 @@ public class Department implements Serializable {
      */
     @TableField("VC_MAIL")
     private String mail;
-
-    /**
-     * 是否已撤销
-     */
-    @TableField("N_IS_REMOVED")
-    private Integer isRemoved;
-
-    /**
-     * 撤销时间
-     */
-    @TableField("D_REMOVE_DATE")
-    private LocalDate removeDate;
-
 
 }

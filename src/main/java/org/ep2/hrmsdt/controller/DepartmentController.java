@@ -100,7 +100,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}/all")
-    public Map<String, Object> deleteAllDepartmentOfId(@PathVariable("id") int id) {
+    public Map<String, Object> deleteAllDepartmentsOfId(@PathVariable("id") int id) {
         Stack<Integer> deletingDepartmentIds = new Stack<>();
         Stack<Integer> departmentStack = new Stack<>();
 

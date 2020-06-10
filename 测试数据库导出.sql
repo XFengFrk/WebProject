@@ -140,8 +140,6 @@ CREATE TABLE `t_dept`  (
   `VC_TELEPHONE` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
   `VC_FAX` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '传真',
   `VC_MAIL` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '电子邮件',
-  `N_IS_REMOVED` smallint(1) NOT NULL DEFAULT 0 COMMENT '是否已撤销',
-  `D_REMOVE_DATE` date NULL DEFAULT NULL COMMENT '撤销时间',
   PRIMARY KEY (`N_DEPT_ID`) USING BTREE,
   INDEX `FK_DEPT_REF_DEPT`(`N_PARENT_ID`) USING BTREE,
   INDEX `FK_TYPE_REF_CODE`(`N_DEPT_TYPE`) USING BTREE,
@@ -155,14 +153,14 @@ CREATE TABLE `t_dept`  (
 -- ----------------------------
 -- Records of t_dept
 -- ----------------------------
-INSERT INTO `t_dept` VALUES (1, 'D10000', '综合部', 74, NULL, '四川成都', '610000', '10000000000', '023-123456', '123456@321.com', 0, NULL);
-INSERT INTO `t_dept` VALUES (2, 'D20001', '技术部', 75, 1, '北京', '100000', '12345678910', '023-321456', '321@asd.com', 0, NULL);
-INSERT INTO `t_dept` VALUES (3, 'D20002', '项目工作室A', 75, 2, '四川成都', '610000', '65478912332', '023-546461', '6545@354.com', 0, NULL);
-INSERT INTO `t_dept` VALUES (4, 'D20003', '项目工作室B', 75, 2, '浙江杭州', '546321', '45653184654', '023-645134', '684135@asd.com', 0, NULL);
-INSERT INTO `t_dept` VALUES (5, 'D20004', '项目A工作组', 75, 3, '江苏苏州', '845312', '35431354121', '023-453354', 'afh@sdifh.com', 0, NULL);
-INSERT INTO `t_dept` VALUES (6, 'D30001', '财务部', 74, 1, '天津', '245331', '84354846431', '023-534131', 'aehf@asof.com', 0, NULL);
-INSERT INTO `t_dept` VALUES (7, 'D30002', '财务办公厅', 74, 6, '重庆', '354515', '45131531351', '023-955155', 'asdja@soda.com', 0, NULL);
-INSERT INTO `t_dept` VALUES (8, 'D40001', '人事部', 74, 1, '湖南长沙', '453312', '35413515513', '023-563153', 'asifj@sovj.com', 0, NULL);
+INSERT INTO `t_dept` VALUES (1, 'D10000', '综合部', 74, NULL, '四川成都', '610000', '10000000000', '023-123456', '123456@321.com');
+INSERT INTO `t_dept` VALUES (2, 'D20001', '技术部', 75, 1, '北京', '100000', '12345678910', '023-321456', '321@asd.com');
+INSERT INTO `t_dept` VALUES (3, 'D20002', '项目工作室A', 75, 2, '四川成都', '610000', '65478912332', '023-546461', '6545@354.com');
+INSERT INTO `t_dept` VALUES (4, 'D20003', '项目工作室B', 75, 2, '浙江杭州', '546321', '45653184654', '023-645134', '684135@asd.com');
+INSERT INTO `t_dept` VALUES (5, 'D20004', '项目A工作组', 75, 3, '江苏苏州', '845312', '35431354121', '023-453354', 'afh@sdifh.com');
+INSERT INTO `t_dept` VALUES (6, 'D30001', '财务部', 74, 1, '天津', '245331', '84354846431', '023-534131', 'aehf@asof.com');
+INSERT INTO `t_dept` VALUES (7, 'D30002', '财务办公厅', 74, 6, '重庆', '354515', '45131531351', '023-955155', 'asdja@soda.com');
+INSERT INTO `t_dept` VALUES (8, 'D40001', '人事部', 74, 1, '湖南长沙', '453312', '35413515513', '023-563153', 'asifj@sovj.com');
 
 -- ----------------------------
 -- Table structure for t_employee

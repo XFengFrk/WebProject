@@ -49,7 +49,7 @@ public class CodeController {
         return ResponseJsonBuilder.success(100, "get code list successful!", codes);
     }
 
-    @PostMapping()
+    @PostMapping
     public Map<String, Object> insertCode(@RequestBody Code code) {
         QueryWrapper<Code> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("VC_CODE_LABEL", code.getLabel());
@@ -69,7 +69,7 @@ public class CodeController {
         }
     }
 
-    @PutMapping()
+    @PutMapping
     public Map<String, Object> updateCodeById(@RequestBody Code code) {
         boolean res = codeService.updateById(code);
         if (res) {
@@ -87,5 +87,16 @@ public class CodeController {
         } else {
             return ResponseJsonBuilder.error(203, "delete code failed!");
         }
+    }
+
+    @DeleteMapping("/ids")
+    public Map<String, Object> deleteCodeByIds(@RequestBody List<Integer> ids) {
+        int count = 0;
+
+        for (int id: ids) {
+            if (codeService.removeById(id)) count++;
+        }
+
+        return ResponseJsonBuilder.success(100, "delete codes successful!", count);
     }
 }
