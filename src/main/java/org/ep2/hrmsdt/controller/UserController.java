@@ -1,12 +1,14 @@
 package org.ep2.hrmsdt.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.ep2.hrmsdt.entity.User;
 import org.ep2.hrmsdt.service.UserService;
 import org.ep2.hrmsdt.util.ResponseJsonBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -22,6 +24,40 @@ import java.util.Map;
 public class UserController {
     @Resource
     private UserService userService;
+
+    @GetMapping()
+    public Map<String, Object> getLoginStatus(HttpSession httpSession) {
+        String username = (String) httpSession.getAttribute("username");
+
+        if (username != null) {
+            return ResponseJsonBuilder.success(100, "already logged in!", username);
+        } else {
+            return ResponseJsonBuilder.error(300, "not logged in!");
+        }
+    }
+
+    @PostMapping("/login")
+    public Map<String, Object> doLogin(@RequestBody User user, HttpSession httpSession) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("VC_USERNAME", user.getUsername());
+        queryWrapper.eq("VC_PASSWORD", user.getPassword());
+
+        int count = userService.count(queryWrapper);
+
+        if (count > 0) {
+            httpSession.setAttribute("username", user.getUsername());
+            return ResponseJsonBuilder.success(100, "login successful!", user.getUsername());
+        } else {
+            return ResponseJsonBuilder.error(301, "login failed! wrong username or password");
+        }
+    }
+
+    @PostMapping("/logout")
+    public Map<String, Object> doLogout(HttpSession httpSession) {
+        httpSession.removeAttribute("username");
+
+        return ResponseJsonBuilder.success(100, "logout successful!", null);
+    }
 
     @GetMapping("/all")
     public Map<String, Object> getUsers() {

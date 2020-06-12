@@ -99,6 +99,17 @@ public class DepartmentController {
         }
     }
 
+    @DeleteMapping("/batch")
+    public Map<String, Object> deleteDepartmentsByIds(@RequestBody List<Integer> ids) {
+        int count = 0;
+
+        for (int id: ids) {
+            if (departmentService.removeById(id)) count++;
+        }
+
+        return ResponseJsonBuilder.success(100, "delete codes successful!", count);
+    }
+
     @DeleteMapping("/{id}/all")
     public Map<String, Object> deleteAllDepartmentsOfId(@PathVariable("id") int id) {
         Stack<Integer> deletingDepartmentIds = new Stack<>();

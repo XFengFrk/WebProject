@@ -44,11 +44,4 @@ public class User implements Serializable {
     @TableField("VC_PASSWORD")
     private String password;
 
-    /**
-     * 用户角色
-     */
-    @TableField("N_ROLE")
-    private Integer role;
-
-
 }

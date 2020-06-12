@@ -286,16 +286,15 @@ CREATE TABLE `t_user`  (
   `N_USER_ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `VC_USERNAME` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
   `VC_PASSWORD` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户密码',
-  `N_ROLE` smallint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户角色',
   PRIMARY KEY (`N_USER_ID`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES (1, 'admin', '123456789', 1);
-INSERT INTO `t_user` VALUES (2, 'user1', '123456', 0);
-INSERT INTO `t_user` VALUES (3, 'user2', '123456', 0);
-INSERT INTO `t_user` VALUES (4, 'user3', '123456', 0);
+INSERT INTO `t_user` VALUES (1, 'admin', '123456789');
+INSERT INTO `t_user` VALUES (2, 'user1', '123456');
+INSERT INTO `t_user` VALUES (3, 'user2', '123456');
+INSERT INTO `t_user` VALUES (4, 'user3', '123456');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -89,8 +89,8 @@ public class CodeController {
         }
     }
 
-    @DeleteMapping("/ids")
-    public Map<String, Object> deleteCodeByIds(@RequestBody List<Integer> ids) {
+    @DeleteMapping("/batch")
+    public Map<String, Object> deleteCodesByIds(@RequestBody List<Integer> ids) {
         int count = 0;
 
         for (int id: ids) {

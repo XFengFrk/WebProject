@@ -1,12 +1,14 @@
 package org.ep2.hrmsdt.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.ep2.hrmsdt.entity.Post;
 import org.ep2.hrmsdt.service.PostService;
 import org.ep2.hrmsdt.util.ResponseJsonBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +40,20 @@ public class PostController {
         }
     }
 
+    @GetMapping("/name/{name}")
+    public Map<String, Object> getMostPostByName(@PathVariable("name") String name) {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("VC_POST_NAME", name);
+        List<Post> postList = postService.list(queryWrapper);
+
+        if (postList.size() > 0) {
+            return ResponseJsonBuilder.success(100,"get title successful!", postList);
+        }
+        else {
+            return ResponseJsonBuilder.error(201, "get title failed!");
+        }
+    }
+
     @PostMapping()
     public Map<String, Object> insertPost(@RequestBody Post post) {
         boolean res = postService.save(post);
@@ -66,5 +82,16 @@ public class PostController {
         } else {
             return ResponseJsonBuilder.error(203, "delete post failed!");
         }
+    }
+
+    @DeleteMapping("/batch")
+    public Map<String, Object> deletePostsByIds(@RequestBody List<Integer> ids) {
+        int count = 0;
+
+        for (int id: ids) {
+            if (postService.removeById(id)) count++;
+        }
+
+        return ResponseJsonBuilder.success(100, "delete posts successful!", count);
     }
 }
