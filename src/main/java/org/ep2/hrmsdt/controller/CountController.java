@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author Doble
@@ -39,9 +39,9 @@ public class CountController {
     @Resource
     private TitleService titleService;
 
-    private static String toPercent(float test) {
+    public static String toPercent(float test) {
         DecimalFormat df = new DecimalFormat("0.00%");
-        return df.format(test);
+       return df.format(test);
     }
 
     /*******************按职称统计一个部门的员工情况**************/
@@ -71,7 +71,7 @@ public class CountController {
             }
         }
 
-        List<Map<String, Object>> map = new ArrayList<>();
+        List<Map<String,Object>> map = new ArrayList<>();
 
         for (String key : map1.keySet()) {
             Map<String, Object> map2 = new HashMap<>();
@@ -84,9 +84,9 @@ public class CountController {
         }
 
         if (map.size() != 0) {
-            return ResponseJsonBuilder.success(100, "get statistics successful", map);
+            return ResponseJsonBuilder.success(100, "get employee successfully", map);
         } else {
-            return ResponseJsonBuilder.error(201, "get statistics failed!");
+            return ResponseJsonBuilder.error(201, "get employee failed!");
         }
     }
 
@@ -99,9 +99,9 @@ public class CountController {
         List<String> genders = new ArrayList<>();
 
         for (Employee test : employees) {
-            if (test.getGender() == 1) {
+            if(test.getGender() == 1) {
                 genders.add("男");
-            } else {
+            }else{
                 genders.add("女");
             }
 
@@ -116,7 +116,7 @@ public class CountController {
             }
         }
 
-        List<Map<String, Object>> map = new ArrayList<>();
+        List<Map<String,Object>> map = new ArrayList<>();
 
         for (String key : map1.keySet()) {
             Map<String, Object> map2 = new HashMap<>();
@@ -129,9 +129,9 @@ public class CountController {
         }
 
         if (map.size() != 0) {
-            return ResponseJsonBuilder.success(100, "get statistics successfully", map);
+            return ResponseJsonBuilder.success(100, "get employee successfully", map);
         } else {
-            return ResponseJsonBuilder.error(201, "get statistics failed!");
+            return ResponseJsonBuilder.error(201, "get employee failed!");
         }
     }
 
@@ -144,15 +144,15 @@ public class CountController {
         List<String> levels = new ArrayList<>();
 
         for (Employee test : employees) {
-            if (test.getEducationLevel() == 5) {
+            if(test.getEducationLevel() == 5) {
                 levels.add("高中");
-            } else if (test.getEducationLevel() == 6) {
+            }else if (test.getEducationLevel() == 6){
                 levels.add("专科");
-            } else if (test.getEducationLevel() == 7) {
+            }else if (test.getEducationLevel() == 7){
                 levels.add("本科");
-            } else if (test.getEducationLevel() == 8) {
+            }else if (test.getEducationLevel() == 8) {
                 levels.add("硕士");
-            } else {
+            }else {
                 levels.add("博士");
             }
 
@@ -167,7 +167,7 @@ public class CountController {
             }
         }
 
-        List<Map<String, Object>> map = new ArrayList<>();
+        List<Map<String,Object>> map = new ArrayList<>();
 
         for (String key : map1.keySet()) {
             Map<String, Object> map2 = new HashMap<>();
@@ -180,9 +180,9 @@ public class CountController {
         }
 
         if (map.size() != 0) {
-            return ResponseJsonBuilder.success(100, "get statistics successfully", map);
+            return ResponseJsonBuilder.success(100, "get employee successfully", map);
         } else {
-            return ResponseJsonBuilder.error(201, "get statistics failed!");
+            return ResponseJsonBuilder.error(201, "get employee failed!");
         }
     }
 
@@ -195,22 +195,25 @@ public class CountController {
         List<Integer> ages = new ArrayList<>();
         List<String> years = new ArrayList<>();
 
+
         for (Employee test : employees) {
             LocalDate birth = test.getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate today = LocalDate.now();
-            long duration = ChronoUnit.YEARS.between(birth, today);
-            ages.add((int) duration);
+            long duration = ChronoUnit.YEARS.between(birth,today);
+            ages.add((int)duration);
         }
 
-        for (int year : ages) {
-            if (20 <= year && year < 30) {
+        for (int year : ages){
+            if(year< 20){
+                years.add("20岁以下");
+            }else if(year <= 30){
                 years.add("20-30岁");
-            } else if (30 <= year && year < 40) {
+            }else if(year <= 40){
                 years.add("30-40岁");
-            } else if (40 <= year && year < 50) {
+            }else if(year <= 50){
                 years.add("40-50岁");
-            } else {
-                years.add("50-60岁");
+            }else{
+                years.add("50岁以上");
             }
         }
 
@@ -223,7 +226,7 @@ public class CountController {
             }
         }
 
-        List<Map<String, Object>> map = new ArrayList<>();
+        List<Map<String,Object>> map = new ArrayList<>();
 
         for (String key : map1.keySet()) {
             Map<String, Object> map2 = new HashMap<>();
@@ -236,9 +239,9 @@ public class CountController {
         }
 
         if (map.size() != 0) {
-            return ResponseJsonBuilder.success(100, "get statistics successfully", map);
+            return ResponseJsonBuilder.success(100, "get employee successfully", map);
         } else {
-            return ResponseJsonBuilder.error(201, "get statistics failed!");
+            return ResponseJsonBuilder.error(201, "get employee failed!");
         }
     }
 }
