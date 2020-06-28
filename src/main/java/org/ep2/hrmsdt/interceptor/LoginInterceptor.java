@@ -12,6 +12,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.sendRedirect(request.getContextPath() + "/index.html");
         }
 
-        return false;
+        return true;
     }
 }
