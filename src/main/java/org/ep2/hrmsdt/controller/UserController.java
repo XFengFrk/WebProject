@@ -20,7 +20,7 @@ import java.util.Map;
  * @since 2020-06-07
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
     @Resource
     private UserService userService;

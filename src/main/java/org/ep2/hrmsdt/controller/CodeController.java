@@ -20,7 +20,7 @@ import java.util.Map;
  * @since 2020-06-07
  */
 @RestController
-@RequestMapping("/code")
+@RequestMapping("/api/code")
 public class CodeController {
     @Resource
     private CodeService codeService;

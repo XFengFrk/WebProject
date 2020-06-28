@@ -4,13 +4,18 @@ package org.ep2.hrmsdt.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.ep2.hrmsdt.entity.Department;
+import org.ep2.hrmsdt.entity.Employee;
 import org.ep2.hrmsdt.service.DepartmentService;
+import org.ep2.hrmsdt.service.EmployeeService;
 import org.ep2.hrmsdt.util.MoveToEntity;
 import org.ep2.hrmsdt.util.ResponseJsonBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -21,10 +26,12 @@ import java.util.*;
  * @since 2020-06-07
  */
 @RestController
-@RequestMapping("/department")
+@RequestMapping("/api/department")
 public class DepartmentController {
     @Resource
     private DepartmentService departmentService;
+    @Resource
+    private EmployeeService employeeService;
 
     @GetMapping("/all")
     public Map<String, Object> getDepartments() {
@@ -48,6 +55,14 @@ public class DepartmentController {
         List<Department> departments = departmentService.list(queryWrapper);
 
         return ResponseJsonBuilder.success(100, "get sub-departments successful!", departments);
+    }
+
+    @GetMapping("/removable")
+    public Map<String, Object> getRemovableDepartmentIdList() {
+        List<Integer> referredTitleIds = employeeService.list().stream().map(Employee::getDepartmentId).distinct().collect(Collectors.toList());
+        List<Integer> removableIds = departmentService.list(new QueryWrapper<Department>().notIn("N_DEPT_ID", referredTitleIds)).stream().map(Department::getId).collect(Collectors.toList());
+
+        return ResponseJsonBuilder.success(100, "get removable department id list successful!", removableIds);
     }
 
     @PostMapping
@@ -91,11 +106,15 @@ public class DepartmentController {
         updateWrapper.set("N_PARENT_ID", null);
         departmentService.update(updateWrapper);
 
-        boolean res = departmentService.removeById(id);
-        if (res) {
-            return ResponseJsonBuilder.success(100, "delete department successful!", true);
-        } else {
-            return ResponseJsonBuilder.error(203, "delete department failed!");
+        try {
+            boolean res = departmentService.removeById(id);
+            if (res) {
+                return ResponseJsonBuilder.success(100, "delete department successful!", true);
+            } else {
+                return ResponseJsonBuilder.error(203, "delete department failed!");
+            }
+        } catch (Exception e) {
+            return ResponseJsonBuilder.error(204, "delete department failed! caused by an unvalidated foreign key constraint");
         }
     }
 
@@ -104,10 +123,13 @@ public class DepartmentController {
         int count = 0;
 
         for (int id: ids) {
-            if (departmentService.removeById(id)) count++;
+            try {
+                if (departmentService.removeById(id)) count++;
+            } catch (Exception e) {
+                return ResponseJsonBuilder.error(204, "delete departments failed! caused by an unvalidated foreign key constraint");
+            }
         }
-
-        return ResponseJsonBuilder.success(100, "delete codes successful!", count);
+        return ResponseJsonBuilder.success(100, "delete departments successful!", count);
     }
 
     @DeleteMapping("/{id}/all")
@@ -130,9 +152,14 @@ public class DepartmentController {
         }
 
         int departmentCount = deletingDepartmentIds.size();
-        while (!deletingDepartmentIds.isEmpty()) {
-            departmentService.removeById(deletingDepartmentIds.pop());
+        try {
+            while (!deletingDepartmentIds.isEmpty()) {
+                departmentService.removeById(deletingDepartmentIds.pop());
+            }
+        } catch (Exception e) {
+            return ResponseJsonBuilder.error(204, "delete department and sub-departments failed! caused by an unvalidated foreign key constraint");
         }
+
 
         return ResponseJsonBuilder.success(100, "delete department and sub-departments successful!", departmentCount);
     }

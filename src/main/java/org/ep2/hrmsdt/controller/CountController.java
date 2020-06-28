@@ -30,7 +30,7 @@ import java.util.Map;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/count/department")
+@RequestMapping("/api/count/department")
 
 
 public class CountController {

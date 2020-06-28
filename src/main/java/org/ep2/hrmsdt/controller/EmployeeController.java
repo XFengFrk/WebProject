@@ -21,7 +21,7 @@ import java.util.Map;
  * @since 2020-06-07
  */
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/api/employee")
 public class EmployeeController {
     @Resource
     private EmployeeService employeeService;

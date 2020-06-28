@@ -2,7 +2,9 @@ package org.ep2.hrmsdt.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.ep2.hrmsdt.entity.Employee;
 import org.ep2.hrmsdt.entity.Post;
+import org.ep2.hrmsdt.service.EmployeeService;
 import org.ep2.hrmsdt.service.PostService;
 import org.ep2.hrmsdt.util.ResponseJsonBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -20,10 +23,12 @@ import java.util.Map;
  * @since 2020-06-07
  */
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 public class PostController {
     @Resource
     private PostService postService;
+    @Resource
+    private EmployeeService employeeService;
 
     @GetMapping("/all")
     public Map<String, Object> getPosts() {
@@ -54,6 +59,14 @@ public class PostController {
         }
     }
 
+    @GetMapping("/removable")
+    public Map<String, Object> getRemovablePostIdList() {
+        List<Integer> referredPostIds = employeeService.list().stream().map(Employee::getPostId).distinct().collect(Collectors.toList());
+        List<Integer> removableIds = postService.list(new QueryWrapper<Post>().notIn("N_POST_ID", referredPostIds)).stream().map(Post::getId).collect(Collectors.toList());
+
+        return ResponseJsonBuilder.success(100, "get removable post id list successful!", removableIds);
+    }
+
     @PostMapping()
     public Map<String, Object> insertPost(@RequestBody Post post) {
         boolean res = postService.save(post);
@@ -76,11 +89,16 @@ public class PostController {
 
     @DeleteMapping("/{id}")
     public Map<String, Object> deletePostById(@PathVariable("id") int id) {
-        boolean res = postService.removeById(id);
-        if (res) {
-            return ResponseJsonBuilder.success(100, "delete post successful!", true);
-        } else {
-            return ResponseJsonBuilder.error(203, "delete post failed!");
+        try {
+            boolean res = postService.removeById(id);
+
+            if (res) {
+                return ResponseJsonBuilder.success(100, "delete post successful!", true);
+            } else {
+                return ResponseJsonBuilder.error(203, "delete post failed!");
+            }
+        } catch (Exception e) {
+            return ResponseJsonBuilder.error(204, "delete post failed! caused by an unvalidated foreign key constraint");
         }
     }
 
@@ -89,9 +107,12 @@ public class PostController {
         int count = 0;
 
         for (int id: ids) {
-            if (postService.removeById(id)) count++;
+            try {
+                if (postService.removeById(id)) count++;
+            } catch (Exception e) {
+                return ResponseJsonBuilder.error(204, "delete posts failed! caused by an unvalidated foreign key constraint");
+            }
         }
-
         return ResponseJsonBuilder.success(100, "delete posts successful!", count);
     }
 }
